@@ -14,23 +14,20 @@ class CartController extends Controller
     public function index()
     {
         $cart = session()->get('cart');
-        $sum = 0;
-        foreach ($cart as $item) {
-            $sum += $item['price'] * $item['quantity'];
+        // dd($cart);
+        if (isset($cart)) {
+            $sum = 0;
+            foreach ($cart as $item) {
+                $sum += $item['price'] * $item['quantity'];
+            }
+            return view('cart', [
+                'cart' => $cart,
+                'products' => Product::class,
+                'sum' => $sum
+            ]);
+        } else {
+            dd('Корзина пуста');
         }
-        return view('cart', [
-            'cart' => $cart,
-            'products' => Product::class,
-            'sum' => $sum
-        ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -58,21 +55,6 @@ class CartController extends Controller
         return back()->with('success', 'Товар успешно добавлен!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Cart $cart)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -98,8 +80,12 @@ class CartController extends Controller
         } else {
             unset($cart[$product['id']]);
         }
+        if (empty($cart)) {
+            session()->forget('cart');
+        } else {
+            session()->put('cart', $cart);
+        }
 
-        session()->put('cart', $cart);
         return back();
     }
 }

@@ -12,15 +12,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return view('checkout');
     }
 
     /**
@@ -28,38 +20,31 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        // dd($request->all());
+        $validated = $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'customer_phone' => 'required|string|max:20',
+            'customer_email' => 'required|email',
+            'address' => 'required|string|max:150',
+            'comment' => 'nullable|string|max:500',
+        ]);
+        $cart = session()->get('cart');
+        $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+        $order = Order::create([
+            ...$validated,
+            'total_price' => $total
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Order $order)
-    {
-        //
-    }
+        // Добавляем товары
+        foreach ($cart as $productId => $item) {
+            $order->items()->create([
+                'product_id' => $productId,
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+            ]);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Order $order)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Order $order)
-    {
-        //
+        // Очищаем корзину
+        session()->forget('cart');
     }
 }

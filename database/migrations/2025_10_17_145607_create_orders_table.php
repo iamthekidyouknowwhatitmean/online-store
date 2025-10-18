@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('customer_email');
             $table->string('address');
             $table->text('comment')->nullable();
+            $table->decimal('total_price', 10, 2);
             $table->timestamps();
         });
     }
