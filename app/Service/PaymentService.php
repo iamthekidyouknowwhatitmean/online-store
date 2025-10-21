@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Models\Order;
+use App\Models\Transaction;
 use YooKassa\Client;
 
 class PaymentService
@@ -13,21 +15,31 @@ class PaymentService
         return $client;
     }
 
-    public function createPayment(float $amount, string $description, array $options = [])
+    public function createPayment(Order $order)
     {
         $client = $this->getClient();
         $payment = $client->createPayment([
             'amount' => [
-                'value' => $amount,
+                'value' => $order->total_price,
                 'currency' => 'RUB',
             ],
             'capture' => false,
             'confirmation' => [
                 'type' => 'redirect',
-                'return_url' => '/payments/callback',
+                'return_url' => 'https://34caf89c446400a5f001335a52c911fd.serveo.net/',
             ],
-            'description' => $description
+            'description' => 'Оплата заказа №' . $order->id,
+            'metadata' => [
+                'order_id' => $order->id
+            ]
         ], uniqid('', true));
+
+        Transaction::create([
+            'order_id' => $order->id,
+            'payment_id' => $payment->id,
+            'amount' => $order->total_price,
+            'payment_method' => $payment->payment_method?->type ?? null,
+        ]);
         return $payment->getConfirmation()->getConfirmationUrl();
     }
 }

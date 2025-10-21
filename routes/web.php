@@ -20,4 +20,4 @@ Route::get('/checkout', [OrderController::class, 'index']);
 Route::post('/checkout', [OrderController::class, 'store']);
 
 
-Route::match(['GET', 'POST'], '/payments/callback', [PaymentController::class, 'callback']);
+Route::match(['GET', 'POST'], '/payments/callback', [OrderController::class, 'callback']);

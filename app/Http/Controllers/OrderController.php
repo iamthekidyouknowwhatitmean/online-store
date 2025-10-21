@@ -3,7 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Transaction;
+use App\Service\PaymentService;
+use Exception;
 use Illuminate\Http\Request;
+use YooKassa\Model\Notification\NotificationEventType;
+use YooKassa\Model\Notification\NotificationSucceeded;
+use YooKassa\Model\Notification\NotificationWaitingForCapture;
+use YooKassa\Model\Payment\PaymentStatus;
 
 class OrderController extends Controller
 {
@@ -46,5 +53,40 @@ class OrderController extends Controller
 
         // Очищаем корзину
         session()->forget('cart');
+
+        $service = new PaymentService;
+        $confirmationUrl = $service->createPayment($order);
+
+        return redirect($confirmationUrl);
+    }
+
+    public function callback()
+    {
+        $source = file_get_contents('php://input');
+        $requestBody = json_decode($source, true);
+
+        try {
+
+            $notification = ($requestBody['event'] === NotificationEventType::PAYMENT_SUCCEEDED)
+                ? new NotificationSucceeded($requestBody)
+                : new NotificationWaitingForCapture($requestBody);
+
+            $payment = $notification->getObject();
+            if (isset($payment->status) && ($payment->status === 'succeeded')) {
+                if ((bool)$payment->paid === true) {
+                    $metadata = (object)$payment->metadata;
+                    if (isset($metadata->order_id)) {
+                        $orderId = (int)$metadata->order_id;
+                        $transaction = Transaction::find($orderId);
+                        $transaction->status = 'CONFIRMED';
+                        $transaction->update([
+                            'status' => 'CONFIRMED'
+                        ]);
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            // Обработка ошибок при неверных данных
+        }
     }
 }
