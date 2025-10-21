@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendOrderToTelegramJob;
 use App\Models\Order;
 use App\Models\Transaction;
 use App\Service\PaymentService;
@@ -82,6 +83,7 @@ class OrderController extends Controller
                         $transaction->update([
                             'status' => 'CONFIRMED'
                         ]);
+                        dispatch(new SendOrderToTelegramJob($orderId));
                     }
                 }
             }

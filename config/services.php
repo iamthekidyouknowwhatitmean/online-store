@@ -38,6 +38,11 @@ return [
     'yookassa' => [
         'shop_id' => env('YOOKASSA_SHOP_ID', null),
         'secret_key' => env('YOOKASSA_SECRET_KEY', null)
+    ],
+
+    'telegram' => [
+        'telegram_bot_token' => env('TELEGRAM_BOT_TOKEN'),
+        'telegram_chat_id' => env('TELEGRAM_CHAT_ID')
     ]
 
 ];

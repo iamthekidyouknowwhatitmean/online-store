@@ -23,10 +23,10 @@ class PaymentService
                 'value' => $order->total_price,
                 'currency' => 'RUB',
             ],
-            'capture' => false,
+            'capture' => true,
             'confirmation' => [
                 'type' => 'redirect',
-                'return_url' => 'https://34caf89c446400a5f001335a52c911fd.serveo.net/',
+                'return_url' => '/',
             ],
             'description' => 'Оплата заказа №' . $order->id,
             'metadata' => [
