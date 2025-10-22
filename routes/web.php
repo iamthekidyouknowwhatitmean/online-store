@@ -1,14 +1,12 @@
 <?php
 
-use App\Exports\OrdersExport;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
 
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,6 +24,12 @@ Route::post('/checkout', [OrderController::class, 'store']);
 
 Route::match(['GET', 'POST'], '/payments/callback', [OrderController::class, 'callback']);
 
-Route::get('/orders/export', function () {
-    return (new OrdersExport)->store('orders.xlsx');
+Route::get('/register', [RegisterController::class, 'index'])->name('register.index');
+Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+
+Route::get('/login', [LoginController::class, 'index'])->name('login.index');
+Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/dashboard', function () {
+    return view('dashboard');
 });
