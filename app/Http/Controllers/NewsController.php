@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Models\News;
 use Illuminate\Http\Request;
 
-class ProductController
+class NewsController
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $products = Product::all();
-        return view('products', [
-            'products' => $products
-        ]);
+        $news = News::all();
+        return view('news', compact('news'));
     }
 
     /**
@@ -37,15 +35,15 @@ class ProductController
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show(News $info)
     {
-        //
+        dd($info);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit(News $news)
     {
         //
     }
@@ -53,7 +51,7 @@ class ProductController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, News $news)
     {
         //
     }
@@ -61,7 +59,7 @@ class ProductController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(News $news)
     {
         //
     }

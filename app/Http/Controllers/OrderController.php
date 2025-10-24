@@ -13,7 +13,7 @@ use YooKassa\Model\Notification\NotificationSucceeded;
 use YooKassa\Model\Notification\NotificationWaitingForCapture;
 use YooKassa\Model\Payment\PaymentStatus;
 
-class OrderController extends Controller
+class OrderController
 {
     /**
      * Display a listing of the resource.

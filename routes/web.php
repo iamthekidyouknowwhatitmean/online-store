@@ -5,7 +5,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
-
+use App\Http\Controllers\NewsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,7 +21,6 @@ Route::patch('/cart/{product}', [CartController::class, 'update']);
 Route::get('/checkout', [OrderController::class, 'index']);
 Route::post('/checkout', [OrderController::class, 'store']);
 
-
 Route::match(['GET', 'POST'], '/payments/callback', [OrderController::class, 'callback']);
 
 Route::get('/register', [RegisterController::class, 'index'])->name('register.index');
@@ -30,6 +29,7 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 Route::get('/login', [LoginController::class, 'index'])->name('login.index');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-Route::get('/dashboard', function () {
-    return view('dashboard');
-});
+
+
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+Route::get('/news/details/{info}', [NewsController::class, 'show'])->name('news.details');

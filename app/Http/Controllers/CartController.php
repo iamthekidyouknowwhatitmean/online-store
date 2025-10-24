@@ -6,7 +6,7 @@ use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
-class CartController extends Controller
+class CartController
 {
     /**
      * Display a listing of the resource.
