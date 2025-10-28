@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserRegistered;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,12 +24,14 @@ class RegisterController
 
         if (Auth::attempt($request->only('email', 'password'))) {
             return back()->with('emailExist', 'Пользователь с таким почтовым адрессом уже зарегистрирован');
-        } else {
-            $user = User::create($validated);
         }
+
+        $user = User::create($validated);
 
         Auth::login($user);
         $request->session()->regenerate();
+
+        UserRegistered::dispatch($user);
         return back();
     }
 }

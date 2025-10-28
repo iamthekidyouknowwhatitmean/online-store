@@ -1,4 +1,4 @@
-<div class="container">
+<x-layout>
     <h1>Оформление заказа</h1>
 
     <form action="/checkout" method="POST">
@@ -33,4 +33,4 @@
 
         <button type="submit" class="btn btn-success mt-3">Оформить заказ</button>
     </form>
-</div>
+</x-layout>

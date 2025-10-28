@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\UserRegistered;
+use App\Listeners\SendEmailToUser;
 use App\Service\PaymentService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,7 +26,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
         Model::unguard();
+
+        Event::listen(
+            UserRegistered::class,
+            [SendEmailToUser::class, 'handle']
+        );
     }
 }

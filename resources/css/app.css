@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -6,6 +6,43 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+}
+
+body {
+    background-color: black;
+    color: aliceblue;
+}
+
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+}
+input {
+    background-color: #111; /* темный фон */
+    color: #fff; /* белый текст */
+    border: 1px solid #555; /* слегка заметная рамка */
+    padding: 10px 12px; /* внутренние отступы */
+    border-radius: 5px; /* скругление углов */
+    outline: none; /* убрать стандартный синий контур */
+    font-size: 16px; /* удобный размер текста */
+    width: 100%; /* подстраиваем ширину */
+    transition: all 0.2s ease; /* плавные переходы */
+}
+input:focus {
+    border-color: #1e90ff; /* синий бордер при фокусе */
+    box-shadow: 0 0 5px #1e90ff; /* мягкое свечение */
+}
+
+/* Placeholder */
+input::placeholder {
+    color: #aaa; /* светло-серый текст для подсказки */
+    opacity: 1; /* чтобы корректно отображался */
+}
+
+/* При наведении курсора */
+input:hover {
+    border-color: #888; /* слегка светлее рамка при hover */
 }

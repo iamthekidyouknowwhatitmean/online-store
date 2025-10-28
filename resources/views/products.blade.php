@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
+<x-layout>
     <!-- Уведомление -->
     @if(session('success'))
         <div id="flash-message" class="alert alert-success">
@@ -24,11 +16,12 @@
         <p>{{ $product['name'] }}</p>
         <form action="/cart/{{ $product['id'] }}" method="POST">
             @csrf
-            <button>Add To Cart</button>
+            <button class="bg-blue-500 rounded-xl p-1.5 font-bold cursor-pointer">Add To Cart</button>
         </form>
     @endforeach
-</body>
-</html>
+</x-layout>
+    
+
 
 <script>
     setTimeout(() => {
