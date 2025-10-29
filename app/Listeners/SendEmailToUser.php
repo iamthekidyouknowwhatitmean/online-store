@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
-class SendEmailToUser
+class SendEmailToUser implements ShouldQueue
 {
     /**
      * Handle the event.
@@ -16,7 +16,6 @@ class SendEmailToUser
     public function handle(UserRegistered $event): void
     {
         $user_name = $event->user->name;
-
-        Mail::to('user@example.com')->send(new WelcomeUser($user_name));
+        Mail::to('user@example.com')->queue(new WelcomeUser($user_name));
     }
 }

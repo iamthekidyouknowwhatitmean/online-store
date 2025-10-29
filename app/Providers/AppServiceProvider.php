@@ -27,10 +27,5 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Model::unguard();
-
-        Event::listen(
-            UserRegistered::class,
-            [SendEmailToUser::class, 'handle']
-        );
     }
 }
