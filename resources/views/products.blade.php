@@ -13,12 +13,14 @@
     @endif
 
     @foreach ($products as $product)
-        <p>{{ $product['name'] }}</p>
+        <p>{{ $product['title'] }}</p>
         <form action="/cart/{{ $product['id'] }}" method="POST">
             @csrf
             <button class="bg-blue-500 rounded-xl p-1.5 font-bold cursor-pointer">Add To Cart</button>
         </form>
     @endforeach
+
+    {{ $products->links() }}
 </x-layout>
     
 

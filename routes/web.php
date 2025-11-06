@@ -20,7 +20,6 @@ Route::patch('/cart/{product}', [CartController::class, 'update']);
 
 Route::get('/checkout', [OrderController::class, 'index']);
 Route::post('/checkout', [OrderController::class, 'store']);
-
 Route::match(['GET', 'POST'], '/payments/callback', [OrderController::class, 'callback']);
 
 Route::get('/register', [RegisterController::class, 'index'])->name('register.index');

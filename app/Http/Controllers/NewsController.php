@@ -13,7 +13,7 @@ class NewsController
     public function index()
     {
         $news = News::all();
-        return view('news', compact('news'));
+        return view('news.index', compact('news'));
     }
 
     /**
@@ -37,7 +37,10 @@ class NewsController
      */
     public function show(News $info)
     {
-        dd($info);
+        return view('news.detail', [
+            'title' => $info->title,
+            'content' => $info->content
+        ]);
     }
 
     /**

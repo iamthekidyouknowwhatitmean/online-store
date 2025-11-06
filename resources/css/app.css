@@ -4,45 +4,61 @@
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
-
 @theme {
     --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
+    --font-integral: "Integral CF Bold", sans-serif;
+    --font-satoshi-regular: "Satoshi Regular", sans-serif;
+    --font-satoshi-medium: "Satoshi Medium", sans-serif;
+    --font-satoshi-bold: "Satoshi Bold", sans-serif;
 }
 
-body {
-    background-color: black;
-    color: aliceblue;
+@font-face {
+    font-family: "Satoshi Regular";
+    src: url("../fonts/Satoshi-Regular.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
 }
 
-.container {
-    max-width: 1300px;
-    margin: 0 auto;
-}
-input {
-    background-color: #111; /* темный фон */
-    color: #fff; /* белый текст */
-    border: 1px solid #555; /* слегка заметная рамка */
-    padding: 10px 12px; /* внутренние отступы */
-    border-radius: 5px; /* скругление углов */
-    outline: none; /* убрать стандартный синий контур */
-    font-size: 16px; /* удобный размер текста */
-    width: 100%; /* подстраиваем ширину */
-    transition: all 0.2s ease; /* плавные переходы */
-}
-input:focus {
-    border-color: #1e90ff; /* синий бордер при фокусе */
-    box-shadow: 0 0 5px #1e90ff; /* мягкое свечение */
+@font-face {
+    font-family: "Satoshi Medium";
+    src: url("../fonts/Satoshi-Medium.woff2") format("woff2");
+    font-weight: medium;
+    font-style: normal;
 }
 
-/* Placeholder */
-input::placeholder {
-    color: #aaa; /* светло-серый текст для подсказки */
-    opacity: 1; /* чтобы корректно отображался */
+@font-face {
+    font-family: "Satoshi Bold";
+    src: url("../fonts/Satoshi-Bold.woff2") format("woff2");
+    font-weight: bold;
+    font-style: normal;
 }
 
-/* При наведении курсора */
-input:hover {
-    border-color: #888; /* слегка светлее рамка при hover */
+@font-face {
+    font-family: "Integral CF Bold";
+    src: url("../fonts/Integralcf-bold.woff2") format("woff2");
+    font-weight: bold;
+    font-style: normal;
+}
+
+.header-search {
+    @apply relative bg-[#F0F0F0] w-[577px] py-[12px] px-[16px] rounded-[62px] outline-none;
+}
+
+.search-wrapper {
+    position: relative;
+}
+
+.search-wrapper::before {
+    content: "";
+    z-index: 1;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    background: url("./icons/glass.svg") center/contain no-repeat;
+}
+
+.order-table td:last-child {
+    width: 0;
 }

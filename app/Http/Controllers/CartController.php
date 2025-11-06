@@ -13,20 +13,19 @@ class CartController
      */
     public function index()
     {
-        $cart = session()->get('cart');
-        // dd($cart);
-        if (isset($cart)) {
-            $sum = 0;
+        // проверка, существует ли сессия с таким ключом, чтобы при его отсутствии не было ошибок
+        if (session()->has('cart')) { // 
+            $cart = session()->get('cart');
+            $total = 0;
+
             foreach ($cart as $item) {
-                $sum += $item['price'] * $item['quantity'];
+                $total += $item['price'] * $item['quantity'];
             }
             return view('cart', [
                 'cart' => $cart,
                 'products' => Product::class,
-                'sum' => $sum
+                'total' => $total
             ]);
-        } else {
-            dd('Корзина пуста');
         }
     }
 
@@ -39,15 +38,14 @@ class CartController
         $product = Product::findOrFail($product->id);
         $cart = session()->get('cart', []);
 
-        // Check if the item is in the cart and increment the quantity
         if (isset($cart[$product->id])) {
             $cart[$product->id]['quantity']++;
         } else {
-            // If not in the cart, add it with quantity as 1
             $cart[$product->id] = [
-                "name" => $product->name,
+                "title" => $product->title,
                 "quantity" => 1,
-                "price" => $product->price
+                "price" => $product->price,
+                'discount_percentage' => $product->discount_percentage
             ];
         }
         session()->put('cart', $cart);
@@ -64,28 +62,32 @@ class CartController
         $cart = session()->get('cart');
         $cart[$product->id]['quantity'] = max(1, (int) $request->input('quantity', 1));
         session()->put('cart', $cart);
+
         return back();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, Product $product)
+    public function destroy(Product $product)
     {
         // Взаимодействия с базой данных нет, поэтому пока что работает только на НЕавторизованных пользователях
         // просто удаляем из сессии выбранное пользователем значение
         $cart = session()->get('cart');
-        if ($cart[$product['id']]['quantity'] > 1) {
-            $cart[$product['id']]['quantity']--;
-        } else {
-            unset($cart[$product['id']]);
+        if (isset($cart[$product->id])) {
+            unset($cart[$product->id]);
+            session()->put('cart', $cart);
         }
+        // if ($cart[$product['id']]['quantity'] > 1) {
+        //     $cart[$product['id']]['quantity']--;
+        // } else {
+        //     unset($cart[$product['id']]);
+        // }
         if (empty($cart)) {
             session()->forget('cart');
         } else {
             session()->put('cart', $cart);
         }
-
-        return back();
+        return response()->json(['success' => true]);
     }
 }

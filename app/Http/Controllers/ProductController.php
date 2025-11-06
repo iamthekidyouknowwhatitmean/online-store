@@ -12,7 +12,7 @@ class ProductController
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::cursorPaginate(15);
         return view('products', [
             'products' => $products
         ]);
