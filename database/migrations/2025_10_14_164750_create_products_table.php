@@ -17,6 +17,9 @@ return new class extends Migration
             $table->text('description');
             $table->float('price');
             $table->decimal('discount_percentage');
+            $table->integer('stock');
+            $table->string('thumbnail');
+            $table->json('images');
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
             $table->timestamps();
         });

@@ -14,19 +14,17 @@ class CartController
     public function index()
     {
         // проверка, существует ли сессия с таким ключом, чтобы при его отсутствии не было ошибок
-        if (session()->has('cart')) { // 
-            $cart = session()->get('cart');
-            $total = 0;
+        $cart = session()->get('cart', []);
+        $total = 0;
 
-            foreach ($cart as $item) {
-                $total += $item['price'] * $item['quantity'];
-            }
-            return view('cart', [
-                'cart' => $cart,
-                'products' => Product::class,
-                'total' => $total
-            ]);
+        foreach ($cart as $item) {
+            $total += $item['price'] * $item['quantity'];
         }
+        return view('cart.index', [
+            'cart' => $cart,
+            'products' => Product::class,
+            'total' => $total
+        ]);
     }
 
     /**
@@ -74,6 +72,7 @@ class CartController
         // Взаимодействия с базой данных нет, поэтому пока что работает только на НЕавторизованных пользователях
         // просто удаляем из сессии выбранное пользователем значение
         $cart = session()->get('cart');
+
         if (isset($cart[$product->id])) {
             unset($cart[$product->id]);
             session()->put('cart', $cart);

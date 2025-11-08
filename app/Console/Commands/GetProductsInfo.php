@@ -28,8 +28,9 @@ class GetProductsInfo extends Command
      */
     public function handle()
     {
-        $responseProducts = Http::get('https://dummyjson.com/products?limit=75&select=title,description,price,category,discountPercentage')->collect()->all()['products'];
+        $responseProducts = Http::get('https://dummyjson.com/products/?limit=10&select=title,description,price,category,discountPercentage,thumbnail,stock,images')->collect()->all()['products'];
         foreach ($responseProducts as $product) {
+
             $category = Category::firstOrCreate([
                 'name' => $product['category']
             ]);
@@ -39,8 +40,17 @@ class GetProductsInfo extends Command
                 'description' => $product['description'],
                 'price' => $product['price'],
                 'category_id' => $category->id,
-                'discount_percentage' => $product['discountPercentage']
+                'discount_percentage' => $product['discountPercentage'],
+                'stock' => $product['stock'],
+                'thumbnail' => $product['thumbnail'],
+                'images' => $product['images']
             ];
+            /* 
+            $table->integer('stock');
+            $table->string('thumbnail');
+            $table->json('images');
+            
+            */
 
             Product::firstOrCreate($productData);
         }
