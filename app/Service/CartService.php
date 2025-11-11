@@ -47,9 +47,7 @@ class CartService
         }
     }
 
-    private function getUserCart() {
-        return Auth::user()->cartProducts()
-    }
+    private function getUserCart() {}
 
     private function getGuestCart()
     {
