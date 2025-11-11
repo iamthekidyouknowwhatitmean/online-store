@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Service\CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,7 +13,7 @@ class LoginController
         return view('auth.login');
     }
 
-    public function authenticate(Request $request)
+    public function authenticate(Request $request, CartService $cartService)
     {
         $credentials = $request->validate([
             'password' => ['required'],
@@ -21,7 +22,9 @@ class LoginController
 
 
         if (Auth::attempt($credentials)) {
+            $cartService->addToUserCart();
             $request->session()->regenerate();
+
             return redirect('/');
         }
 

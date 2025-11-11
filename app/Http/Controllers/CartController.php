@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Product;
+use App\Service\CartService;
 use Illuminate\Http\Request;
 
 class CartController
@@ -30,24 +31,12 @@ class CartController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Product $product)
+    public function store(Product $product, CartService $cartService)
     {
-        // Пока что для неавторизованного пользователя
         $product = Product::findOrFail($product->id);
-        $cart = session()->get('cart', []);
-
-        if (isset($cart[$product->id])) {
-            $cart[$product->id]['quantity']++;
-        } else {
-            $cart[$product->id] = [
-                "title" => $product->title,
-                "quantity" => 1,
-                "price" => $product->price,
-                'discount_percentage' => $product->discount_percentage
-            ];
+        if ($product) {
+            $cartService->addToGuestCart($product);
         }
-        session()->put('cart', $cart);
-
         return back()->with('success', 'Товар успешно добавлен!');
     }
 
