@@ -5,12 +5,27 @@
             <div class="flex gap-5">
                 <div class="grid gap-6 py-5 px-6 border border-black/10 rounded-[20px] w-[715px]">
                     @foreach ($cart as $key => $cartItem)
-                        <div class="cart-item flex justify-between" data-id="{{ $key }}">
+                        <div class="cart-item flex justify-between" data-id="{{ Auth::check() ? $cartItem->product->id : $key}}">
                             <div class="flex gap-4">
                                 <img src="https://placehold.co/124x124" alt="">
                                 <div class="grid items-start justify-items-start">
-                                    <h3 class="font-satoshi-bold text-[20px]">{{ $cartItem['title'] }}</h3>
-                                    <p class="font-satoshi-bold text-[24px]">${{ $cartItem['price'] }}</p>
+                                    @if (Auth::check())
+                                        <h3 class="font-satoshi-bold text-[20px]">                                    
+                                            {{ $cartItem->product->title }}
+                                        </h3>
+
+                                        <p class="font-satoshi-bold text-[24px]">
+                                            ${{ $cartItem->product->price }}
+                                        </p>
+                                    @else
+                                        <h3 class="font-satoshi-bold text-[20px]">                                    
+                                            {{ $cartItem['title'] }}
+                                        </h3>
+
+                                        <p class="font-satoshi-bold text-[24px]">
+                                            ${{ $cartItem['price'] }}
+                                        </p>
+                                    @endif                        
                                 </div>
                             </div>
                             <div class="w-[225px] grid justify-items-end gap-[56px]">

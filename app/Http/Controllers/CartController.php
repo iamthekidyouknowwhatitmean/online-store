@@ -12,19 +12,12 @@ class CartController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(CartService $cartService)
     {
-        // проверка, существует ли сессия с таким ключом, чтобы при его отсутствии не было ошибок
-        $cart = session()->get('cart', []);
-        $total = 0;
-
-        foreach ($cart as $item) {
-            $total += $item['price'] * $item['quantity'];
-        }
         return view('cart.index', [
-            'cart' => $cart,
+            'cart' => $cartService->getCart(),
             'products' => Product::class,
-            'total' => $total
+            'total' => $cartService->getTotal()
         ]);
     }
 
@@ -35,7 +28,7 @@ class CartController
     {
         $product = Product::findOrFail($product->id);
         if ($product) {
-            $cartService->addToGuestCart($product);
+            $cartService->addToCart($product);
         }
         return back()->with('success', 'Товар успешно добавлен!');
     }
@@ -56,26 +49,10 @@ class CartController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product, CartService $cartService)
     {
-        // Взаимодействия с базой данных нет, поэтому пока что работает только на НЕавторизованных пользователях
-        // просто удаляем из сессии выбранное пользователем значение
-        $cart = session()->get('cart');
+        $cartService->removeFromCart($product);
 
-        if (isset($cart[$product->id])) {
-            unset($cart[$product->id]);
-            session()->put('cart', $cart);
-        }
-        // if ($cart[$product['id']]['quantity'] > 1) {
-        //     $cart[$product['id']]['quantity']--;
-        // } else {
-        //     unset($cart[$product['id']]);
-        // }
-        if (empty($cart)) {
-            session()->forget('cart');
-        } else {
-            session()->put('cart', $cart);
-        }
         return response()->json(['success' => true]);
     }
 }

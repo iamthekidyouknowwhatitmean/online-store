@@ -22,7 +22,7 @@ class LoginController
 
 
         if (Auth::attempt($credentials)) {
-            $cartService->addToUserCart();
+            $cartService->migrateGuestCartToUser();
             $request->session()->regenerate();
 
             return redirect('/');
