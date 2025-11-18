@@ -20,7 +20,7 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 Отправка POST запроса на данную страницу, чтобы в таблице product_likes сохранялась информация о том КТО лайкает и ЧТО лайкает
 */
 Route::post('/product/{product}', [ProductFavoriteController::class, 'store'])->name('product.store');
-Route::get('/favorites', [ProductFavoriteController::class, 'index']);
+Route::get('/favorites', [ProductFavoriteController::class, 'index'])->name('favorites');
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/{product}', [CartController::class, 'store'])->name('cart.store');

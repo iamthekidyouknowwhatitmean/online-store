@@ -26,7 +26,7 @@ class CartController
      */
     public function store(Product $product, CartService $cartService)
     {
-        $product = Product::findOrFail($product->id);
+        $product = Product::findOrFail($product->id); // ???
         if ($product) {
             $cartService->addToCart($product);
         }

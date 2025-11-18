@@ -43,7 +43,7 @@
 }
 
 .header-search {
-    @apply relative bg-[#F0F0F0] w-[577px] py-[12px] px-[16px] rounded-[62px] outline-none;
+    @apply relative bg-[#F0F0F0] w-[550px] py-[12px] px-[16px] rounded-[62px] outline-none;
 }
 
 .search-wrapper {

@@ -29,9 +29,12 @@
                 <a href="{{ route('cart.index') }}">
                     <img src="{{ asset('icons/cart.svg') }}" alt="" class="w-[24px] h-[24px]">
                 </a>
+                <a href="{{ route('favorites') }}">
+                    <img src="{{ asset('icons/heart.svg') }}" alt="" class="w-[24px] h-[24px]">
+                </a> 
                 <a href="{{ route('login.index') }}">
                     <img src="{{ asset('icons/profile.svg') }}" alt="" class="w-[24px] h-[24px]">
-                </a> 
+                </a>
                 
             </div>
         
