@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class GetProductsInfo extends Command
 {
@@ -14,7 +14,7 @@ class GetProductsInfo extends Command
      *
      * @var string
      */
-    protected $signature = 'app:get-products-info';
+    protected $signature = 'import:product {file=products.json}';
 
     /**
      * The console command description.
@@ -28,31 +28,55 @@ class GetProductsInfo extends Command
      */
     public function handle()
     {
-        $responseProducts = Http::get('https://dummyjson.com/products/?limit=25&select=title,description,price,category,discountPercentage,thumbnail,stock,images')->collect()->all()['products'];
-        foreach ($responseProducts as $product) {
+        $filename = $this->argument('file');
+        $jsonFile = storage_path('app/imports/' . $filename);
 
-            $category = Category::firstOrCreate([
-                'name' => $product['category']
-            ]);
+        $this->info("Найден файл: {$jsonFile}");
+        try {
+            $jsonContent = file_get_contents($jsonFile);
+            $data = json_decode($jsonContent, true);
+            // dd($data);
 
-            $productData = [
-                'title' => $product['title'],
-                'description' => $product['description'],
-                'price' => $product['price'],
-                'category_id' => $category->id,
-                'discount_percentage' => $product['discountPercentage'],
-                'stock' => $product['stock'],
-                'thumbnail' => $product['thumbnail'],
-                'images' => $product['images']
-            ];
-            /* 
-            $table->integer('stock');
-            $table->string('thumbnail');
-            $table->json('images');
-            
-            */
+            $this->info("Найдено товаров: " . count($data));
 
-            Product::firstOrCreate($productData);
+            $bar = $this->output->createProgressBar(count($data));
+            $bar->start();
+
+            $imported = 0;
+
+            foreach ($data as $product) {
+                $category = Category::firstOrCreate([
+                    'name' => $product['category']
+                ]);
+                Product::firstOrCreate([
+                    'name' => $product['name'],
+                    'description' => $product['description'],
+                    'brand' => $product['brand'],
+                    'size' => $product['size'],
+                    'color' => $product['color'],
+                    'material' => $product['material'],
+                    'gender' => $product['gender'],
+                    'price' => $product['price'],
+                    'category_id' => $category->id,
+                    'discount_percentage' => $product['discountPercentage'],
+                    'stock' => $product['stock'],
+                    'thumbnail' => $product['thumbnail'],
+                    'images' => json_encode($product['images'])
+                ]);
+
+                $imported++;
+                $bar->advance();
+            }
+
+            $bar->finish();
+            $this->newLine(2);
+
+            $this->info("✅ Импорт завершен!");
+            $this->info("Импортировано: {$imported}");
+        } catch (\Exception $e) {
+            $this->error("Ошибка: " . $e->getMessage());
+            Log::error("Import command error: " . $e->getMessage());
+            return 1;
         }
     }
 }

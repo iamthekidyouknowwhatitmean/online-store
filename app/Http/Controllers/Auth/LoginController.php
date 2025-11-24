@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Service\CartService;
+use App\Service\FavoritesService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +14,7 @@ class LoginController
         return view('auth.login');
     }
 
-    public function authenticate(Request $request, CartService $cartService)
+    public function authenticate(Request $request, CartService $cartService, FavoritesService $favoritesService)
     {
         $credentials = $request->validate([
             'password' => ['required'],
@@ -23,6 +24,7 @@ class LoginController
 
         if (Auth::attempt($credentials)) {
             $cartService->migrateGuestCartToUser();
+            $favoritesService->migrate();
             $request->session()->regenerate();
 
             return redirect('/');

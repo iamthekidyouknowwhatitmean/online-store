@@ -62,3 +62,36 @@
 .order-table td:last-child {
     width: 0;
 }
+
+/* range-slider.css */
+.range-slider {
+    @apply absolute top-0 w-full h-1.5 appearance-none pointer-events-none bg-transparent;
+}
+
+.range-slider::-webkit-slider-thumb {
+    @apply appearance-none h-4 w-4 rounded-full bg-black cursor-pointer pointer-events-auto shadow-md;
+}
+
+.range-slider::-moz-range-thumb {
+    @apply h-4 w-4 rounded-full bg-black cursor-pointer pointer-events-auto border-0 shadow-md;
+}
+
+.range-slider::-webkit-slider-track {
+    @apply appearance-none bg-transparent;
+}
+
+.range-slider::-moz-range-track {
+    @apply bg-transparent border-0;
+}
+
+.range-track {
+    @apply h-1.5 bg-[#F0F0F0] rounded-full;
+}
+
+.range-progress {
+    @apply absolute top-0 h-1.5 bg-black rounded-full;
+}
+
+.range-values {
+    @apply flex justify-between mt-4 text-sm text-gray-600;
+}

@@ -16,13 +16,9 @@ class ProductFavoriteController
     {
         // $favorites = User::find(Auth::id())->favoriteProducts;
         $favorites = $this->favoritesService->getFavorites();
-        $favoritesModels = [];
-        foreach ($favorites as $key => $favorite) {
-            $favoritesModels[] = Product::find($key);
-        }
-
+        // dd($favorites);
         return view('favorite', [
-            'favorites' => $favoritesModels
+            'favorites' => $favorites
         ]);
     }
     public function store(Product $product)

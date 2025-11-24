@@ -24,11 +24,38 @@ class FavoritesService
         return $this->storeGuestFavorites($product);
     }
 
+    public function migrate()
+    {
+        $favorites = session()->get('favorites', []);
+        foreach ($favorites as $key => $product) {
+            DB::table('product_favorite')->insert([
+                'user_id' => Auth::id(),
+                'product_id' => $key,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+        session()->forget('favorites');
+    }
+
     private function getGuestFavorites()
     {
-        return session()->get('favorites', []);
+        $favorites = session()->get('favorites', []);
+        $products = [];
+        foreach ($favorites as $key => $favorite) {
+            $products[] = Product::find($key);
+        }
+        return $products;
     }
-    private function getUserFavorites() {}
+    private function getUserFavorites()
+    {
+        $favorites = DB::table('product_favorite')->get()->all();
+        $products = [];
+        foreach ($favorites as $favorite) {
+            $products[] = Product::find($favorite->product_id);
+        }
+        return $products;
+    }
 
     private function storeGuestFavorites(Product $product)
     {

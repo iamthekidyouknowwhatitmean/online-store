@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController
 {
@@ -14,7 +15,7 @@ class ProductController
     {
         $products = Product::cursorPaginate(15);
         return view('products', [
-            'products' => $products
+            'sizes' => DB::table('products')->distinct()->pluck('size')
         ]);
     }
 
